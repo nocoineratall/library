@@ -31,19 +31,22 @@ const book2 = {
 };
 
 const myLibrary = [book0, book1, book2];
+let bookPropsAreDisplayed = false;
+let i = 0;
 
-// ------------------------------- E V E N T S -----------------------------------//
+// ------------------------------- FUNCTIONS -----------------------------------//
 
 showLibBtn.addEventListener("click", () => {
   if (!libIsDisplayed) {
-    let i = 0;
+    i = 0;
     clearLibraryDisplay();
-    showLibrary(i);
+    showLibrary();
   } else {
     clearLibraryDisplay();
   }
 });
 
+//book object constructor
 function Book() {
   this.title = title;
   this.author = author;
@@ -51,7 +54,7 @@ function Book() {
   this.genre = genre;
 }
 
-function addBookToLib() {
+function addBookToLib(title, author, publishY, genre) {
   const book = new Book(title, author, publishY, genre);
   myLibrary.push(book);
 }
@@ -71,10 +74,10 @@ function removeByAttribute(array, attribute, value) {
   return array;
 }
 
-function showLibrary(i) {
+function showLibrary() {
   libIsDisplayed = true;
   myLibrary.forEach((book) => {
-    let bookPropsAreDisplayed = false;
+    bookPropsAreDisplayed = false;
     let bookDiv = document.createElement("div");
     bookDiv.className = "book" + i;
 
@@ -85,55 +88,67 @@ function showLibrary(i) {
     library.appendChild(bookDiv);
     i++;
 
-    // displays and removes book properties
+    // expands and collapses book in library
     bookTitle.addEventListener("click", () => {
-      if (!bookPropsAreDisplayed) {
-        bookPropsAreDisplayed = true;
-        const bookAuthor = document.createElement("p");
-        bookAuthor.textContent = book.author;
-        bookDiv.appendChild(bookAuthor);
-
-        const bookPublishY = document.createElement("p");
-        bookPublishY.textContent = book.publishY;
-        bookDiv.appendChild(bookPublishY);
-
-        const bookGenre = document.createElement("p");
-        bookGenre.textContent = book.genre;
-        bookDiv.appendChild(bookGenre);
-
-        // Book buttons functionality
-        const bookReadToggle = document.createElement("button");
-        bookReadToggle.textContent = "Read";
-        bookReadToggle.addEventListener("click", () => {
-          !book.read ? (book.read = true) : (book.read = false);
-          book.read
-            ? bookDiv.classList.add("read")
-            : bookDiv.classList.remove("read");
-        });
-
-        const bookRemoveBtn = document.createElement("button");
-        bookRemoveBtn.textContent = "X";
-        bookRemoveBtn.addEventListener("click", () => {
-          let removeConfirm = prompt(
-            "Confirm you want to delete this book from Library? (y/n)"
-          ).toLowerCase();
-          if (removeConfirm == "y") {
-            removeByAttribute(myLibrary, "id", book.id);
-            clearLibraryDisplay();
-            showLibrary(i);
-          }
-        });
-
-        bookDiv.appendChild(bookReadToggle);
-        bookDiv.appendChild(bookRemoveBtn);
-      } else {
-        for (let j = bookDiv.children.length - 1; j > 0; j--) {
-          bookDiv.removeChild(bookDiv.children[j]);
-        }
-        bookPropsAreDisplayed = false;
-      }
+      expandBook(book, bookDiv);
     });
   });
+}
+
+function expandBook(book, bookDiv) {
+  if (!bookPropsAreDisplayed) {
+    bookPropsAreDisplayed = true;
+    const bookAuthor = document.createElement("p");
+    bookAuthor.textContent = book.author;
+    bookDiv.appendChild(bookAuthor);
+
+    const bookPublishY = document.createElement("p");
+    bookPublishY.textContent = book.publishY;
+    bookDiv.appendChild(bookPublishY);
+
+    const bookGenre = document.createElement("p");
+    bookGenre.textContent = book.genre;
+    bookDiv.appendChild(bookGenre);
+
+    // Book buttons functionality
+    const bookReadBtn = document.createElement("button");
+    bookReadBtn.textContent = "Read";
+    bookReadBtn.addEventListener("click", () => {
+      toggleBookRead(book, bookDiv);
+    });
+
+    const bookRemoveBtn = document.createElement("button");
+    bookRemoveBtn.textContent = "X";
+
+    bookRemoveBtn.addEventListener("click", () => {
+      removeButton(book.id);
+    });
+
+    bookDiv.appendChild(bookReadBtn);
+    bookDiv.appendChild(bookRemoveBtn);
+  } else {
+    for (let j = bookDiv.children.length - 1; j > 0; j--) {
+      bookDiv.removeChild(bookDiv.children[j]);
+    }
+    bookPropsAreDisplayed = false;
+  }
+}
+
+function toggleBookRead(book, bookDiv) {
+  !book.read ? (book.read = true) : (book.read = false);
+  book.read ? bookDiv.classList.add("read") : bookDiv.classList.remove("read");
+}
+
+function removeButton(bookId) {
+  let removeConfirm = prompt(
+    "Confirm you want to delete this book from Library? (y/n)"
+  ).toLowerCase();
+  if (removeConfirm == "y") {
+    removeByAttribute(myLibrary, "id", bookId);
+    console.log(bookId);
+    clearLibraryDisplay();
+    showLibrary(i);
+  }
 }
 
 function clearLibraryDisplay() {
