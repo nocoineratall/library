@@ -4,16 +4,40 @@ const showLibBtn = document.querySelector(".show-lib");
 showLibBtn.addEventListener("click", () => {
   let i = 1;
   myLibrary.forEach((book) => {
-    const bookBtn = document.createElement("button");
-    bookBtn.className = "book" + i;
+    let bookPropsAreDisplayed = false;
+    let bookDiv = document.createElement("div");
+    bookDiv.className = "book";
+    bookDiv.className += i;
+
+    const bookTitle = document.createElement("h3");
+    bookTitle.textContent = book.title;
+    bookDiv.appendChild(bookTitle);
+
+    body.appendChild(bookDiv);
     i++;
-    bookBtn.textContent = book.title;
-    bookBtn.addEventListener("click", () => {
-      const bookAuthor = document.createElement("p");
-      bookAuthor.textContent = book.author;
-      bookBtn.appendChild(bookAuthor);
+
+    bookDiv.addEventListener("click", () => {
+      if (!bookPropsAreDisplayed) {
+        bookPropsAreDisplayed = true;
+        const bookAuthor = document.createElement("p");
+        bookAuthor.textContent = book.author;
+        bookDiv.appendChild(bookAuthor);
+
+        const bookPublishY = document.createElement("p");
+        bookPublishY.textContent = book.publishY;
+        bookDiv.appendChild(bookPublishY);
+
+        const bookGenre = document.createElement("p");
+        bookGenre.textContent = book.genre;
+        bookDiv.appendChild(bookGenre);
+      } else {
+        let childrenNumber = bookDiv.children.length;
+        for (let j = bookDiv.children.length - 1; j > 0; j--) {
+          bookDiv.removeChild(bookDiv.children[j]);
+        }
+        bookPropsAreDisplayed = false;
+      }
     });
-    body.appendChild(bookBtn);
   });
 });
 
@@ -21,25 +45,31 @@ const myLibrary = [
   {
     title: "1984",
     author: "George Orwell",
-    publishDate: 1948,
+    publishY: 1948,
     genre: "Sci-fi",
   },
   {
     title: "The Bitcoin Standard",
     author: "Saifedean Ammous",
-    publishDate: 2018,
+    publishY: 2018,
     genre: "Economics",
+  },
+  {
+    title: "Longitude",
+    author: "somebody",
+    publishY: 2010,
+    genre: "History",
   },
 ];
 
 function Book() {
   this.title = title;
   this.author = author;
-  this.publishDate = publishDate;
+  this.publishY = publishY;
   this.genre = genre;
 }
 
 function addBookToLib() {
-  const book = new Book(title, author, publishDate, genre);
+  const book = new Book(title, author, publishY, genre);
   myLibrary.push(book);
 }
