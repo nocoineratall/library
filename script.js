@@ -1,6 +1,7 @@
 const body = document.querySelector("body");
 const library = document.querySelector(".library");
 const showLibBtn = document.querySelector(".show-lib");
+const addBookBtn = document.querySelector(".add-book");
 let libIsDisplayed = false;
 
 const book0 = {
@@ -44,6 +45,12 @@ showLibBtn.addEventListener("click", () => {
   } else {
     clearLibraryDisplay();
   }
+});
+
+addBookBtn.addEventListener("click", () => {
+  const addBookModal = document.createElement("div");
+  addBookModal.classList = "new-book-modal";
+  body.appendChild(addBookModal);
 });
 
 //book object constructor
@@ -121,7 +128,7 @@ function expandBook(book, bookDiv) {
     bookRemoveBtn.textContent = "X";
 
     bookRemoveBtn.addEventListener("click", () => {
-      removeButton(book.id);
+      removeBook(book.id);
     });
 
     bookDiv.appendChild(bookReadBtn);
@@ -139,7 +146,7 @@ function toggleBookRead(book, bookDiv) {
   book.read ? bookDiv.classList.add("read") : bookDiv.classList.remove("read");
 }
 
-function removeButton(bookId) {
+function removeBook(bookId) {
   let removeConfirm = prompt(
     "Confirm you want to delete this book from Library? (y/n)"
   ).toLowerCase();
