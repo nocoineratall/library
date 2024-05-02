@@ -11,5 +11,23 @@
     <button class="show-lib">Show Library</button>
     <button class="add-book">Add Book</button>
     <div class="library"></div>
+    <div class="new-book-container">
+      <form action="#" method="post" class="new-book-form">
+        <label for="author">Author name:</label>
+        <input type="text" name="author" />
+        <label for="title">Book title:</label>
+        <input type="text" name="title" />
+        <label for="publishY">Published on:</label>
+        <input type="text" name="publishY" />
+        <label for="genre">Genre:</label>
+        <input type="text" name="genre" />
+        <label for="read">Read?</label>
+        <select>
+          <option value="true">Already read</option>
+          <option value="false">Not read yet</option>
+        </select>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   </body>
 </html>
