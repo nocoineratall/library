@@ -2,7 +2,16 @@ const body = document.querySelector("body");
 const library = document.querySelector(".library");
 const showLibBtn = document.querySelector(".show-lib");
 const addBookBtn = document.querySelector(".add-book");
+const submitBookBtn = document.querySelector(".submit-button");
 const addBookContainer = document.querySelector(".new-book-container");
+
+//form inputs
+const inputNewTitle = document.querySelector("#title");
+const inputNewAuthor = document.querySelector("#author");
+const inputNewPublishY = document.querySelector("#publishY");
+const inputNewGenre = document.querySelector("#genre");
+const inputNewStatusRead = document.querySelector("#read");
+
 let libIsDisplayed = false;
 let isFormDisplayed = false;
 
@@ -37,7 +46,7 @@ const myLibrary = [book0, book1, book2];
 let bookPropsAreDisplayed = false;
 let i = 0;
 
-// ------------------------------- FUNCTIONS -----------------------------------//
+// -------------------------------   EVENTS  ----------------------------------- //
 
 showLibBtn.addEventListener("click", () => {
   if (!libIsDisplayed) {
@@ -49,20 +58,43 @@ showLibBtn.addEventListener("click", () => {
   }
 });
 
-addBookBtn.addEventListener("click", () => {
-  toggleNewBookSidebar();
-});
+addBookBtn.addEventListener("click", toggleNewBookSidebar);
+
+submitBookBtn.addEventListener("click", submitNewBook);
+
+// -------------------------------  FUNCTIONS ----------------------------------- //
 
 //book object constructor
-function Book() {
+function Book(title, author, publishY, genre, read) {
   this.title = title;
   this.author = author;
   this.publishY = publishY;
   this.genre = genre;
+  this.read = read;
 }
 
-function addBookToLib(title, author, publishY, genre) {
-  const book = new Book(title, author, publishY, genre);
+function submitNewBook() {
+  addBookToLib(
+    inputNewTitle.value,
+    inputNewAuthor.value,
+    inputNewPublishY.value,
+    inputNewGenre.value,
+    inputNewStatusRead.value
+  );
+
+  clearLibraryDisplay();
+  showLibrary();
+  toggleNewBookSidebar();
+
+  inputNewTitle.value = "";
+  inputNewAuthor.value = "";
+  inputNewPublishY.value = "";
+  inputNewGenre.value = "";
+  inputNewStatusRead.value = "";
+}
+
+function addBookToLib(title, author, publishY, genre, read) {
+  const book = new Book(title, author, publishY, genre, read);
   myLibrary.push(book);
 }
 
