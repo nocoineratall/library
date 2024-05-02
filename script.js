@@ -2,7 +2,9 @@ const body = document.querySelector("body");
 const library = document.querySelector(".library");
 const showLibBtn = document.querySelector(".show-lib");
 const addBookBtn = document.querySelector(".add-book");
+const addBookContainer = document.querySelector(".new-book-container");
 let libIsDisplayed = false;
+let isFormDisplayed = false;
 
 const book0 = {
   id: 0,
@@ -48,9 +50,7 @@ showLibBtn.addEventListener("click", () => {
 });
 
 addBookBtn.addEventListener("click", () => {
-  const addBookModal = document.createElement("div");
-  addBookModal.classList = "new-book-modal";
-  body.appendChild(addBookModal);
+  toggleNewBookSidebar();
 });
 
 //book object constructor
@@ -163,4 +163,14 @@ function clearLibraryDisplay() {
     library.removeChild(library.firstChild);
   }
   libIsDisplayed = false;
+}
+
+function toggleNewBookSidebar() {
+  if (!isFormDisplayed) {
+    isFormDisplayed = true;
+    addBookContainer.classList.add("display");
+  } else {
+    isFormDisplayed = false;
+    addBookContainer.classList.remove("display");
+  }
 }
