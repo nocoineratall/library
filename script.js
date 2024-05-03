@@ -16,6 +16,7 @@ let isLibDisplayed = false;
 let isFormDisplayed = false;
 const librarySize = 5;
 const myLibrary = [];
+let i = 0;
 
 bookGenres = [
   "Fantasy",
@@ -65,8 +66,6 @@ for (let i = 0; i < librarySize; i++) {
 // };
 
 // const myLibrary = [book0, book1, book2];
-
-let i = 0;
 
 // -------------------------------   EVENTS  ----------------------------------- //
 
@@ -162,13 +161,13 @@ function expandBook(book, bookDiv, areBookPropsDisplayed) {
     bookAuthor.textContent = book.author;
     bookDiv.appendChild(bookAuthor);
 
-    const bookPublishY = document.createElement("p");
-    bookPublishY.textContent = book.publishY;
-    bookDiv.appendChild(bookPublishY);
-
     const bookGenre = document.createElement("p");
     bookGenre.textContent = book.genre;
     bookDiv.appendChild(bookGenre);
+
+    const bookPublishY = document.createElement("p");
+    bookPublishY.textContent = book.publishY;
+    bookDiv.appendChild(bookPublishY);
 
     // Book buttons functionality
     const bookReadBtn = document.createElement("button");
