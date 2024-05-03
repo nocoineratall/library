@@ -14,35 +14,57 @@ const inputNewStatusRead = document.querySelector("#read");
 
 let isLibDisplayed = false;
 let isFormDisplayed = false;
+const librarySize = 5;
+const myLibrary = [];
 
-const book0 = {
-  id: 0,
-  title: "1984",
-  author: "George Orwell",
-  publishY: 1948,
-  genre: "Sci-fi",
-  read: false,
-};
+bookGenres = [
+  "Fantasy",
+  "Adventure",
+  "Thriller",
+  "Sci-fi",
+  "Romantic",
+  "Historical",
+];
 
-const book1 = {
-  id: 1,
-  title: "The Bitcoin Standard",
-  author: "Saifedean Ammous",
-  publishY: 2018,
-  genre: "Economics",
-  read: false,
-};
+for (let i = 0; i < librarySize; i++) {
+  const book = {
+    id: i,
+    title: "title" + i,
+    author: "author" + i,
+    publishY: Math.floor(Math.random() * 1000) + 1000,
+    genre: bookGenres[Math.floor(Math.random() * 10) % 6],
+    read: false,
+  };
+  myLibrary.push(book);
+}
+// const book0 = {
+//   id: 0,
+//   title: "1984",
+//   author: "George Orwell",
+//   publishY: 1948,
+//   genre: "Sci-fi",
+//   read: false,
+// };
 
-const book2 = {
-  id: 2,
-  title: "Longitude",
-  author: "somebody",
-  publishY: 2010,
-  genre: "History",
-  read: false,
-};
+// const book1 = {
+//   id: 1,
+//   title: "The Bitcoin Standard",
+//   author: "Saifedean Ammous",
+//   publishY: 2018,
+//   genre: "Economics",
+//   read: false,
+// };
 
-const myLibrary = [book0, book1, book2];
+// const book2 = {
+//   id: 2,
+//   title: "Longitude",
+//   author: "somebody",
+//   publishY: 2010,
+//   genre: "History",
+//   read: false,
+// };
+
+// const myLibrary = [book0, book1, book2];
 
 let i = 0;
 
@@ -175,6 +197,7 @@ function expandBook(book, bookDiv, areBookPropsDisplayed) {
     for (let j = bookDiv.children.length - 1; j > 0; j--) {
       bookDiv.removeChild(bookDiv.children[j]);
     }
+    bookDiv.classList.remove("read");
     return (areBookPropsDisplayed = false);
   }
 }
