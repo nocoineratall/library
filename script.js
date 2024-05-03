@@ -74,13 +74,14 @@ function Book(title, author, publishY, genre, read) {
 }
 
 function submitNewBook() {
-  addBookToLib(
+  const book = new Book(
     inputNewTitle.value,
     inputNewAuthor.value,
     inputNewPublishY.value,
     inputNewGenre.value,
     inputNewStatusRead.value
   );
+  myLibrary.push(book);
 
   clearLibraryDisplay();
   showLibrary();
@@ -91,11 +92,6 @@ function submitNewBook() {
   inputNewPublishY.value = "";
   inputNewGenre.value = "";
   inputNewStatusRead.value = "";
-}
-
-function addBookToLib(title, author, publishY, genre, read) {
-  const book = new Book(title, author, publishY, genre, read);
-  myLibrary.push(book);
 }
 
 function removeByAttribute(array, attribute, value) {
@@ -151,6 +147,10 @@ function expandBook(book, bookDiv) {
 
     // Book buttons functionality
     const bookReadBtn = document.createElement("button");
+    //fix this!
+    toggleBookRead(book, bookDiv);
+    //fix this!
+
     bookReadBtn.textContent = "Read";
     bookReadBtn.addEventListener("click", () => {
       toggleBookRead(book, bookDiv);
@@ -179,15 +179,15 @@ function toggleBookRead(book, bookDiv) {
 }
 
 function removeBook(bookId) {
-  let removeConfirm = prompt(
-    "Confirm you want to delete this book from Library? (y/n)"
-  ).toLowerCase();
-  if (removeConfirm == "y") {
-    removeByAttribute(myLibrary, "id", bookId);
-    console.log(bookId);
-    clearLibraryDisplay();
-    showLibrary(i);
-  }
+  // let removeConfirm = prompt(
+  //   "Confirm you want to delete this book from Library? (y/n)"
+  // ).toLowerCase();
+  // if (removeConfirm == "y") {
+  removeByAttribute(myLibrary, "id", bookId);
+  console.log(bookId);
+  clearLibraryDisplay();
+  showLibrary(i);
+  //}
 }
 
 function clearLibraryDisplay() {
