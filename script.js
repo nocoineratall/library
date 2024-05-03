@@ -43,7 +43,7 @@ const book2 = {
 };
 
 const myLibrary = [book0, book1, book2];
-let bookPropsAreDisplayed = false;
+
 let i = 0;
 
 // -------------------------------   EVENTS  ----------------------------------- //
@@ -72,6 +72,9 @@ function Book(title, author, publishY, genre, read) {
   this.genre = genre;
   this.read = read;
 }
+
+// Object.getPrototypeOf(Book).arePropsDisplayed = false;
+Book.prototype.arePropsDisplayed = false;
 
 function submitNewBook() {
   const book = new Book(
@@ -112,7 +115,7 @@ function removeByAttribute(array, attribute, value) {
 function showLibrary() {
   isLibDisplayed = true;
   myLibrary.forEach((book) => {
-    bookPropsAreDisplayed = false;
+    let areBookPropsDisplayed = false;
     let bookDiv = document.createElement("div");
     bookDiv.className = "book" + i;
 
@@ -125,14 +128,14 @@ function showLibrary() {
 
     // expands and collapses book in library
     bookTitle.addEventListener("click", () => {
-      expandBook(book, bookDiv);
+      areBookPropsDisplayed = expandBook(book, bookDiv, areBookPropsDisplayed);
     });
   });
 }
 
-function expandBook(book, bookDiv) {
-  if (!bookPropsAreDisplayed) {
-    bookPropsAreDisplayed = true;
+function expandBook(book, bookDiv, areBookPropsDisplayed) {
+  book.read ? bookDiv.classList.add("read") : bookDiv.classList.remove("read");
+  if (!areBookPropsDisplayed) {
     const bookAuthor = document.createElement("p");
     bookAuthor.textContent = book.author;
     bookDiv.appendChild(bookAuthor);
@@ -149,9 +152,13 @@ function expandBook(book, bookDiv) {
     const bookReadBtn = document.createElement("button");
     //
 
-    bookReadBtn.textContent = "Read";
+    if (!book.read) {
+      bookReadBtn.textContent = "Mark as read";
+    } else {
+      bookReadBtn.textContent = "Mark as not read";
+    }
     bookReadBtn.addEventListener("click", () => {
-      toggleBookRead(book, bookDiv);
+      toggleBookRead(book, bookDiv, bookReadBtn);
     });
 
     const bookRemoveBtn = document.createElement("button");
@@ -163,17 +170,25 @@ function expandBook(book, bookDiv) {
 
     bookDiv.appendChild(bookReadBtn);
     bookDiv.appendChild(bookRemoveBtn);
+    return (areBookPropsDisplayed = true);
   } else {
     for (let j = bookDiv.children.length - 1; j > 0; j--) {
       bookDiv.removeChild(bookDiv.children[j]);
     }
-    bookPropsAreDisplayed = false;
+    return (areBookPropsDisplayed = false);
   }
 }
 
-function toggleBookRead(book, bookDiv) {
-  !book.read ? (book.read = true) : (book.read = false);
-  book.read ? bookDiv.classList.add("read") : bookDiv.classList.remove("read");
+function toggleBookRead(book, bookDiv, bookReadBtn) {
+  if (!book.read) {
+    book.read = true;
+    bookDiv.classList.add("read");
+    bookReadBtn.textContent = "Mark as not read";
+  } else {
+    book.read = false;
+    bookDiv.classList.remove("read");
+    bookReadBtn.textContent = "Mark as read";
+  }
 }
 
 function removeBook(bookId) {
@@ -182,7 +197,6 @@ function removeBook(bookId) {
   // ).toLowerCase();
   // if (removeConfirm == "y") {
   removeByAttribute(myLibrary, "id", bookId);
-  console.log(bookId);
   clearLibraryDisplay();
   showLibrary(i);
   //}
