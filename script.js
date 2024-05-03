@@ -12,7 +12,7 @@ const inputNewPublishY = document.querySelector("#publishY");
 const inputNewGenre = document.querySelector("#genre");
 const inputNewStatusRead = document.querySelector("#read");
 
-let libIsDisplayed = false;
+let isLibDisplayed = false;
 let isFormDisplayed = false;
 
 const book0 = {
@@ -49,7 +49,7 @@ let i = 0;
 // -------------------------------   EVENTS  ----------------------------------- //
 
 showLibBtn.addEventListener("click", () => {
-  if (!libIsDisplayed) {
+  if (!isLibDisplayed) {
     i = 0;
     clearLibraryDisplay();
     showLibrary();
@@ -110,7 +110,7 @@ function removeByAttribute(array, attribute, value) {
 }
 
 function showLibrary() {
-  libIsDisplayed = true;
+  isLibDisplayed = true;
   myLibrary.forEach((book) => {
     bookPropsAreDisplayed = false;
     let bookDiv = document.createElement("div");
@@ -147,9 +147,7 @@ function expandBook(book, bookDiv) {
 
     // Book buttons functionality
     const bookReadBtn = document.createElement("button");
-    //fix this!
-    toggleBookRead(book, bookDiv);
-    //fix this!
+    //
 
     bookReadBtn.textContent = "Read";
     bookReadBtn.addEventListener("click", () => {
@@ -194,7 +192,7 @@ function clearLibraryDisplay() {
   while (library.firstChild) {
     library.removeChild(library.firstChild);
   }
-  libIsDisplayed = false;
+  isLibDisplayed = false;
 }
 
 function toggleNewBookSidebar() {
