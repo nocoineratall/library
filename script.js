@@ -28,14 +28,14 @@ bookGenres = [
 ];
 
 for (let i = 0; i < librarySize; i++) {
-  const book = {
-    id: i,
-    title: "title" + i,
-    author: "author" + i,
-    publishY: Math.floor(Math.random() * 1000) + 1000,
-    genre: bookGenres[Math.floor(Math.random() * 10) % 6],
-    read: false,
-  };
+  let id = i;
+  let title = "title" + i;
+  let author = "author" + i;
+  let publishY = Math.floor(Math.random() * 1000) + 1000;
+  let genre = bookGenres[Math.floor(Math.random() * 10) % 6];
+  let read = false;
+
+  const book = new Book(id, title, author, publishY, genre, read);
   myLibrary.push(book);
 }
 
@@ -58,7 +58,8 @@ submitBookBtn.addEventListener("click", submitNewBook);
 // -------------------------------  FUNCTIONS ----------------------------------- //
 
 //book object constructor
-function Book(title, author, publishY, genre, read) {
+function Book(id, title, author, publishY, genre, read) {
+  this.id = myLibrary.length;
   this.title = title;
   this.author = author;
   this.publishY = publishY;
@@ -113,13 +114,12 @@ function showLibrary() {
   isLibDisplayed = true;
   myLibrary.forEach((book) => {
     let areBookPropsDisplayed = false;
-    let bookDiv = document.createElement("div");
-    bookDiv.className = "book" + i;
-
+    const bookDiv = document.createElement("div");
     const bookTitle = document.createElement("h3");
+    bookDiv.className = "book" + i;
     bookTitle.textContent = book.title;
-    bookDiv.appendChild(bookTitle);
 
+    bookDiv.appendChild(bookTitle);
     library.appendChild(bookDiv);
     i++;
 
@@ -151,7 +151,7 @@ function expandBook(book, bookDiv, areBookPropsDisplayed) {
       bookReadBtn.textContent = "MARK AS NOT READ";
     }
     bookReadBtn.addEventListener("click", () => {
-      toggleBookRead(book, bookDiv, bookReadBtn);
+      book.toggleBookRead(book, bookDiv, bookReadBtn);
     });
 
     bookDiv.appendChild(bookAuthor);
@@ -172,18 +172,6 @@ function expandBook(book, bookDiv, areBookPropsDisplayed) {
     }
     bookDiv.classList.remove("read");
     return (areBookPropsDisplayed = false);
-  }
-}
-
-function toggleBookRead(book, bookDiv, bookReadBtn) {
-  if (!book.read) {
-    book.read = true;
-    bookDiv.classList.add("read");
-    bookReadBtn.textContent = "MARK AS NOT READ";
-  } else {
-    book.read = false;
-    bookDiv.classList.remove("read");
-    bookReadBtn.textContent = "MARK AS READ";
   }
 }
 
@@ -214,3 +202,15 @@ function toggleNewBookSidebar() {
     addBookContainer.classList.remove("display");
   }
 }
+
+Book.prototype.toggleBookRead = function (book, bookDiv, bookReadBtn) {
+  if (!book.read) {
+    book.read = true;
+    bookDiv.classList.add("read");
+    bookReadBtn.textContent = "MARK AS NOT READ";
+  } else {
+    book.read = false;
+    bookDiv.classList.remove("read");
+    bookReadBtn.textContent = "MARK AS READ";
+  }
+};
