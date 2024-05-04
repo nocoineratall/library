@@ -38,34 +38,6 @@ for (let i = 0; i < librarySize; i++) {
   };
   myLibrary.push(book);
 }
-// const book0 = {
-//   id: 0,
-//   title: "1984",
-//   author: "George Orwell",
-//   publishY: 1948,
-//   genre: "Sci-fi",
-//   read: false,
-// };
-
-// const book1 = {
-//   id: 1,
-//   title: "The Bitcoin Standard",
-//   author: "Saifedean Ammous",
-//   publishY: 2018,
-//   genre: "Economics",
-//   read: false,
-// };
-
-// const book2 = {
-//   id: 2,
-//   title: "Longitude",
-//   author: "somebody",
-//   publishY: 2010,
-//   genre: "History",
-//   read: false,
-// };
-
-// const myLibrary = [book0, book1, book2];
 
 // -------------------------------   EVENTS  ----------------------------------- //
 
@@ -105,6 +77,9 @@ function submitNewBook() {
     inputNewGenre.value,
     inputNewStatusRead.value
   );
+  if (inputNewTitle.value == "") {
+    return alert("Book title can't be empty");
+  }
   myLibrary.push(book);
 
   clearLibraryDisplay();
@@ -134,6 +109,7 @@ function removeByAttribute(array, attribute, value) {
 }
 
 function showLibrary() {
+  i = 0;
   isLibDisplayed = true;
   myLibrary.forEach((book) => {
     let areBookPropsDisplayed = false;
@@ -158,41 +134,39 @@ function expandBook(book, bookDiv, areBookPropsDisplayed) {
   book.read ? bookDiv.classList.add("read") : bookDiv.classList.remove("read");
   if (!areBookPropsDisplayed) {
     const bookAuthor = document.createElement("p");
-    bookAuthor.textContent = book.author;
-    bookDiv.appendChild(bookAuthor);
-
     const bookGenre = document.createElement("p");
-    bookGenre.textContent = book.genre;
-    bookDiv.appendChild(bookGenre);
-
     const bookPublishY = document.createElement("p");
-    bookPublishY.textContent = book.publishY;
-    bookDiv.appendChild(bookPublishY);
-
-    // Book buttons functionality
     const bookReadBtn = document.createElement("button");
-    //
+    const bookRemoveBtn = document.createElement("button");
+    const buttonsWrapper = document.createElement("div");
 
+    bookAuthor.textContent = book.author;
+    bookGenre.textContent = book.genre;
+    bookPublishY.textContent = book.publishY;
+    buttonsWrapper.classList.add("button-wrapper");
+    bookRemoveBtn.textContent = "X";
     if (!book.read) {
-      bookReadBtn.textContent = "Mark as read";
+      bookReadBtn.textContent = "MARK AS READ";
     } else {
-      bookReadBtn.textContent = "Mark as not read";
+      bookReadBtn.textContent = "MARK AS NOT READ";
     }
     bookReadBtn.addEventListener("click", () => {
       toggleBookRead(book, bookDiv, bookReadBtn);
     });
 
-    const bookRemoveBtn = document.createElement("button");
-    bookRemoveBtn.textContent = "X";
+    bookDiv.appendChild(bookAuthor);
+    bookDiv.appendChild(bookGenre);
+    bookDiv.appendChild(bookPublishY);
+    buttonsWrapper.appendChild(bookReadBtn);
+    buttonsWrapper.appendChild(bookRemoveBtn);
+    bookDiv.appendChild(buttonsWrapper);
 
     bookRemoveBtn.addEventListener("click", () => {
       removeBook(book.id);
     });
-
-    bookDiv.appendChild(bookReadBtn);
-    bookDiv.appendChild(bookRemoveBtn);
     return (areBookPropsDisplayed = true);
   } else {
+    // collapses the bookDiv removing all children
     for (let j = bookDiv.children.length - 1; j > 0; j--) {
       bookDiv.removeChild(bookDiv.children[j]);
     }
@@ -205,23 +179,23 @@ function toggleBookRead(book, bookDiv, bookReadBtn) {
   if (!book.read) {
     book.read = true;
     bookDiv.classList.add("read");
-    bookReadBtn.textContent = "Mark as not read";
+    bookReadBtn.textContent = "MARK AS NOT READ";
   } else {
     book.read = false;
     bookDiv.classList.remove("read");
-    bookReadBtn.textContent = "Mark as read";
+    bookReadBtn.textContent = "MARK AS READ";
   }
 }
 
 function removeBook(bookId) {
-  // let removeConfirm = prompt(
-  //   "Confirm you want to delete this book from Library? (y/n)"
-  // ).toLowerCase();
-  // if (removeConfirm == "y") {
-  removeByAttribute(myLibrary, "id", bookId);
-  clearLibraryDisplay();
-  showLibrary(i);
-  //}
+  let removeConfirm = prompt(
+    "Confirm you want to delete this book from Library? (y/n)"
+  ).toLowerCase();
+  if (removeConfirm == "y") {
+    removeByAttribute(myLibrary, "id", bookId);
+    clearLibraryDisplay();
+    showLibrary(i);
+  }
 }
 
 function clearLibraryDisplay() {
