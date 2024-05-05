@@ -26,10 +26,18 @@ body {
 
 .nav-bar {
   display: flex;
-  padding: 5px;
   justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+
   background-color: var(--nav-bar-color);
   color: white;
+}
+
+.nav-bar img {
+  width: 25px;
+  height: 25px;
 }
 
 p a {
@@ -41,7 +49,7 @@ p a {
 }
 
 .odin-title {
-  font-size: 2rem;
+  font-size: 3rem;
   color: var(--book-font-color);
   text-align: center;
   padding-block: 30px;
