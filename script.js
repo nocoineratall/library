@@ -1,6 +1,6 @@
 const body = document.querySelector("body");
 const library = document.querySelector(".library");
-const showLibBtn = document.querySelector(".show-lib");
+const toggleExpand = document.querySelector(".button-toggle-expand");
 const addBookBtn = document.querySelector(".add-book");
 const submitBookBtn = document.querySelector(".submit-button");
 const addBookContainer = document.querySelector(".new-book-container");
@@ -12,10 +12,11 @@ const inputNewPublishY = document.querySelector("#publishY");
 const inputNewGenre = document.querySelector("#genre");
 const inputNewStatusRead = document.querySelector("#read");
 
-let isLibDisplayed = false;
+let areAllBookExpanded = false; //implementare uso di questo bool
 let isFormDisplayed = false;
 const librarySize = 5;
-const myLibrary = [];
+let myLibrary = [];
+let bookDivs = [];
 let i = 0;
 
 bookGenres = [
@@ -23,7 +24,7 @@ bookGenres = [
   "Adventure",
   "Thriller",
   "Sci-fi",
-  "Romantic",
+  "Novel",
   "Historical",
 ];
 
@@ -39,16 +40,15 @@ for (let i = 0; i < librarySize; i++) {
   myLibrary.push(book);
 }
 
+showLibrary();
+
 // -------------------------------   EVENTS  ----------------------------------- //
 
-showLibBtn.addEventListener("click", () => {
-  if (!isLibDisplayed) {
-    i = 0;
-    clearLibraryDisplay();
-    showLibrary();
-  } else {
-    clearLibraryDisplay();
-  }
+toggleExpand.addEventListener("click", () => {
+  myLibrary.forEach((book) => {
+    const bookDiv = document.createElement("div");
+    expandBook(book);
+  });
 });
 
 addBookBtn.addEventListener("click", toggleNewBookSidebar);
@@ -66,9 +66,6 @@ function Book(id, title, author, publishY, genre, read) {
   this.genre = genre;
   this.read = read;
 }
-
-// Object.getPrototypeOf(Book).arePropsDisplayed = false;
-Book.prototype.arePropsDisplayed = false;
 
 function submitNewBook() {
   const book = new Book(
@@ -127,9 +124,9 @@ function showLibrary() {
     bookRemoveBtn.classList.add("remove-button");
 
     if (!book.read) {
-      bookReadBtn.textContent = "MARK AS READ";
+      bookReadBtn.textContent = "mark as Read";
     } else {
-      bookReadBtn.textContent = "MARK AS NOT READ";
+      bookReadBtn.textContent = "mark as not Read";
     }
 
     bookReadBtn.addEventListener("click", (event) => {
@@ -146,58 +143,42 @@ function showLibrary() {
     buttonsWrapper.appendChild(bookRemoveBtn);
     bookDiv.appendChild(buttonsWrapper);
     library.appendChild(bookDiv);
+    book.div = bookDiv;
+    book.areBookPropsDisplayed = false;
     i++;
 
     // expands and collapses book in library
     bookDiv.addEventListener("click", () => {
-      areBookPropsDisplayed = expandBook(book, bookDiv, areBookPropsDisplayed);
+      expandBook(book);
     });
   });
 }
 
-function expandBook(book, bookDiv, areBookPropsDisplayed) {
-  book.read ? bookDiv.classList.add("read") : bookDiv.classList.remove("read");
-  if (!areBookPropsDisplayed) {
+function expandBook(book) {
+  book.read
+    ? book.div.classList.add("read")
+    : book.div.classList.remove("read");
+  if (!book.areBookPropsDisplayed) {
     const bookAuthor = document.createElement("p");
     const bookGenre = document.createElement("p");
     const bookPublishY = document.createElement("p");
-    // const bookReadBtn = document.createElement("button");
-    // const bookRemoveBtn = document.createElement("button");
-    // const buttonsWrapper = document.createElement("div");
 
     bookAuthor.textContent = book.author;
     bookGenre.textContent = book.genre;
     bookPublishY.textContent = book.publishY;
-    // buttonsWrapper.classList.add("button-wrapper");
-    // bookRemoveBtn.textContent = "X";
-    // if (!book.read) {
-    //   bookReadBtn.textContent = "MARK AS READ";
-    // } else {
-    //   bookReadBtn.textContent = "MARK AS NOT READ";
-    // }
-    // bookReadBtn.addEventListener("click", () => {
-    //   book.toggleBookRead(book, bookDiv, bookReadBtn);
-    // });
 
-    bookDiv.appendChild(bookAuthor);
-    bookDiv.appendChild(bookGenre);
-    bookDiv.appendChild(bookPublishY);
-    // buttonsWrapper.appendChild(bookReadBtn);
-    // buttonsWrapper.appendChild(bookRemoveBtn);
-    // bookDiv.appendChild(buttonsWrapper);
-
-    // bookRemoveBtn.addEventListener("click", () => {
-    //   removeBook(book.id);
-    // });
-    return (areBookPropsDisplayed = true);
+    book.div.appendChild(bookAuthor);
+    book.div.appendChild(bookGenre);
+    book.div.appendChild(bookPublishY);
+    return (book.areBookPropsDisplayed = true);
   } else {
-    // collapses the bookDiv removing all children except for h3 title and button-wrapper
-    //this is achieved by setting the loop to end at j > 1 (skips last two elements)
-    for (let j = bookDiv.children.length - 1; j > 1; j--) {
-      bookDiv.removeChild(bookDiv.children[j]);
+    // collapses the bookDiv removing all children except for h3-title and button-wrapper
+    // this is achieved by setting the loop to end at j > 1 (skips last two elements)
+    for (let j = book.div.children.length - 1; j > 1; j--) {
+      book.div.removeChild(book.div.children[j]);
     }
-    //bookDiv.classList.remove("read");
-    return (areBookPropsDisplayed = false);
+    book.div.classList.remove("read");
+    return (book.areBookPropsDisplayed = false);
   }
 }
 
@@ -233,10 +214,10 @@ Book.prototype.toggleBookRead = function (book, bookDiv, bookReadBtn) {
   if (!book.read) {
     book.read = true;
     bookDiv.classList.add("read");
-    bookReadBtn.textContent = "MARK AS NOT READ";
+    bookReadBtn.textContent = "mark as not Read";
   } else {
     book.read = false;
     bookDiv.classList.remove("read");
-    bookReadBtn.textContent = "MARK AS READ";
+    bookReadBtn.textContent = "mark as Read";
   }
 };
