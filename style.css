@@ -30,7 +30,6 @@ body {
   justify-content: flex-end;
   background-color: var(--nav-bar-color);
   color: white;
-  border-bottom: 2px solid black;
 }
 
 p a {
@@ -39,6 +38,13 @@ p a {
   text-decoration: none;
   color: var(--book-font-color);
   margin-right: 20px;
+}
+
+.odin-title {
+  font-size: 2rem;
+  color: var(--book-font-color);
+  text-align: center;
+  padding-block: 30px;
 }
 
 .wrapper {
@@ -89,9 +95,9 @@ p a {
   background-color: var(--border-color-notread);
   border: none;
   border-radius: 6px;
-  padding-inline: 10px;
+  padding-inline: 15px;
   color: var(--book-font-color);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 }
 
 .library button:hover {
@@ -100,6 +106,7 @@ p a {
 
 .library .remove-button {
   background-color: var(--book-remove-button);
+  width: 35px;
 }
 
 .library .remove-button:hover {
@@ -122,18 +129,17 @@ p a {
 .new-book-container {
   position: absolute;
   left: -20vw;
-  top: 55px; /*approssimato a vista */
+  top: 65px; /*approssimato a vista */
   width: 20vw;
-  background-color: bisque;
+
+  background-color: var(--nav-bar-color);
+  color: var(--book-font-color);
   /* box-shadow: 0px 0px 100px 10px rgb(112, 128, 144, 0.8);*/
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-  transition: 400ms ease;
-
-  /* display: flex;
-  flex-direction: column;
-  gap: 10px; */
   padding-inline: 20px;
+
+  transition: 400ms ease;
 }
 
 .new-book-container > * {
@@ -154,7 +160,7 @@ p a {
 }
 
 .new-book-form label {
-  font-weight: 700;
+  font-weight: 500;
 }
 
 input,
@@ -185,17 +191,20 @@ select {
   font-family: inherit;
   font-size: 1.2rem;
   font-weight: 500;
+
   border-radius: 6px;
+  border: none;
+
   background-color: var(--nav-bar-color);
-  border: 2px solid black;
   color: white;
+
   padding-block: 5px;
 }
 
 .right-side button:hover {
-  background-color: rgb(88, 22, 22);
+  background-color: var(--border-color-read);
 }
 
 .right-side button:active {
-  background-color: rgb(66, 17, 17);
+  background-color: var(--nav-bar-color);
 }
