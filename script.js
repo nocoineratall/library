@@ -116,15 +116,40 @@ function showLibrary() {
     let areBookPropsDisplayed = false;
     const bookDiv = document.createElement("div");
     const bookTitle = document.createElement("h3");
+    const bookReadBtn = document.createElement("button");
+    const bookRemoveBtn = document.createElement("button");
+    const buttonsWrapper = document.createElement("div");
+
     bookDiv.className = "book" + i;
     bookTitle.textContent = book.title;
+    buttonsWrapper.classList.add("button-wrapper");
+    bookRemoveBtn.textContent = "X";
+    bookRemoveBtn.classList.add("remove-button");
+
+    if (!book.read) {
+      bookReadBtn.textContent = "MARK AS READ";
+    } else {
+      bookReadBtn.textContent = "MARK AS NOT READ";
+    }
+
+    bookReadBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      book.toggleBookRead(book, bookDiv, bookReadBtn);
+    });
+    bookRemoveBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      removeBook(book.id);
+    });
 
     bookDiv.appendChild(bookTitle);
+    buttonsWrapper.appendChild(bookReadBtn);
+    buttonsWrapper.appendChild(bookRemoveBtn);
+    bookDiv.appendChild(buttonsWrapper);
     library.appendChild(bookDiv);
     i++;
 
     // expands and collapses book in library
-    bookTitle.addEventListener("click", () => {
+    bookDiv.addEventListener("click", () => {
       areBookPropsDisplayed = expandBook(book, bookDiv, areBookPropsDisplayed);
     });
   });
@@ -136,41 +161,42 @@ function expandBook(book, bookDiv, areBookPropsDisplayed) {
     const bookAuthor = document.createElement("p");
     const bookGenre = document.createElement("p");
     const bookPublishY = document.createElement("p");
-    const bookReadBtn = document.createElement("button");
-    const bookRemoveBtn = document.createElement("button");
-    const buttonsWrapper = document.createElement("div");
+    // const bookReadBtn = document.createElement("button");
+    // const bookRemoveBtn = document.createElement("button");
+    // const buttonsWrapper = document.createElement("div");
 
     bookAuthor.textContent = book.author;
     bookGenre.textContent = book.genre;
     bookPublishY.textContent = book.publishY;
-    buttonsWrapper.classList.add("button-wrapper");
-    bookRemoveBtn.textContent = "X";
-    if (!book.read) {
-      bookReadBtn.textContent = "MARK AS READ";
-    } else {
-      bookReadBtn.textContent = "MARK AS NOT READ";
-    }
-    bookReadBtn.addEventListener("click", () => {
-      book.toggleBookRead(book, bookDiv, bookReadBtn);
-    });
+    // buttonsWrapper.classList.add("button-wrapper");
+    // bookRemoveBtn.textContent = "X";
+    // if (!book.read) {
+    //   bookReadBtn.textContent = "MARK AS READ";
+    // } else {
+    //   bookReadBtn.textContent = "MARK AS NOT READ";
+    // }
+    // bookReadBtn.addEventListener("click", () => {
+    //   book.toggleBookRead(book, bookDiv, bookReadBtn);
+    // });
 
     bookDiv.appendChild(bookAuthor);
     bookDiv.appendChild(bookGenre);
     bookDiv.appendChild(bookPublishY);
-    buttonsWrapper.appendChild(bookReadBtn);
-    buttonsWrapper.appendChild(bookRemoveBtn);
-    bookDiv.appendChild(buttonsWrapper);
+    // buttonsWrapper.appendChild(bookReadBtn);
+    // buttonsWrapper.appendChild(bookRemoveBtn);
+    // bookDiv.appendChild(buttonsWrapper);
 
-    bookRemoveBtn.addEventListener("click", () => {
-      removeBook(book.id);
-    });
+    // bookRemoveBtn.addEventListener("click", () => {
+    //   removeBook(book.id);
+    // });
     return (areBookPropsDisplayed = true);
   } else {
-    // collapses the bookDiv removing all children
-    for (let j = bookDiv.children.length - 1; j > 0; j--) {
+    // collapses the bookDiv removing all children except for h3 title and button-wrapper
+    //this is achieved by setting the loop to end at j > 1 (skips last two elements)
+    for (let j = bookDiv.children.length - 1; j > 1; j--) {
       bookDiv.removeChild(bookDiv.children[j]);
     }
-    bookDiv.classList.remove("read");
+    //bookDiv.classList.remove("read");
     return (areBookPropsDisplayed = false);
   }
 }
