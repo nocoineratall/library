@@ -193,7 +193,6 @@ function expandBook(book) {
     for (let j = book.div.children.length - 1; j > 1; j--) {
       book.div.removeChild(book.div.children[j]);
     }
-    book.div.classList.remove("read");
     book.areBookPropsDisplayed = false;
   }
 }
