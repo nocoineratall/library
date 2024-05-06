@@ -1,9 +1,8 @@
-const body = document.querySelector("body");
 const library = document.querySelector(".library");
 const expandAllButton = document.querySelector(".button-toggle-expand");
 const addBookBtn = document.querySelector(".add-book");
-const submitBookBtn = document.querySelector(".submit-button");
 const addBookContainer = document.querySelector(".new-book-container");
+const submitBookBtn = document.querySelector(".submit-button");
 
 //form inputs
 const inputNewTitle = document.querySelector("#title");
@@ -12,12 +11,13 @@ const inputNewPublishY = document.querySelector("#publishY");
 const inputNewGenre = document.querySelector("#genre");
 const inputNewStatusRead = document.querySelector("#read");
 
-let areAllBooksExpanded = false; //implementare uso di questo bool
+let toggleReadString = "Mark as read";
+let toggleNotReadString = "Mark as not read";
 let isFormDisplayed = false;
-const librarySize = 5;
+let areAllBooksExpanded = false;
+const librarySize = 4;
 let myLibrary = [];
-let bookDivs = [];
-let i = 0;
+let i = 0; //book object index
 
 bookGenres = [
   "Fantasy",
@@ -28,42 +28,9 @@ bookGenres = [
   "Historical",
 ];
 
-for (let i = 0; i < librarySize; i++) {
-  let id = i;
-  let title = "title" + i;
-  let author = "author" + i;
-  let publishY = Math.floor(Math.random() * 1000) + 1000;
-  let genre = bookGenres[Math.floor(Math.random() * 10) % 6];
-  let read = false;
-
-  const book = new Book(id, title, author, publishY, genre, read);
-  myLibrary.push(book);
-}
-
-showLibrary();
-
 // -------------------------------   EVENTS  ----------------------------------- //
 
-expandAllButton.addEventListener("click", () => {
-  if (!areAllBooksExpanded) {
-    myLibrary.forEach((book) => {
-      const bookDiv = document.createElement("div");
-      if (!book.areBookPropsDisplayed) {
-        expandBook(book);
-      }
-    });
-    areAllBooksExpanded = true;
-    expandAllButton.textContent = "Collapse All";
-  } else {
-    myLibrary.forEach((book) => {
-      if (book.areBookPropsDisplayed) {
-        expandBook(book);
-      }
-    });
-    areAllBooksExpanded = false;
-    expandAllButton.textContent = "Expand All";
-  }
-});
+expandAllButton.addEventListener("click", expandAllBooks);
 
 addBookBtn.addEventListener("click", toggleNewBookSidebar);
 
@@ -82,72 +49,47 @@ function Book(id, title, author, publishY, genre, read) {
   this.arePropsDisplayed = false;
 }
 
-function submitNewBook() {
-  const book = new Book(
-    myLibrary.length,
-    inputNewTitle.value,
-    inputNewAuthor.value,
-    inputNewPublishY.value,
-    inputNewGenre.value,
-    inputNewStatusRead.value,
-    false
-  );
-  if (inputNewTitle.value == "") {
-    return alert("Book title can't be empty");
+// Prototype function definition
+Book.prototype.toggleBookRead = function (bookReadBtn) {
+  if (!this.read) {
+    this.read = true;
+    this.div.classList.add("read");
+    bookReadBtn.textContent = toggleNotReadString;
+  } else {
+    this.read = false;
+    this.div.classList.remove("read");
+    bookReadBtn.textContent = toggleReadString;
   }
-  myLibrary.push(book);
-
-  clearLibraryDisplay();
-  showLibrary();
-  toggleNewBookSidebar();
-
-  inputNewTitle.value = "";
-  inputNewAuthor.value = "";
-  inputNewPublishY.value = "";
-  inputNewGenre.value = "";
-  inputNewStatusRead.value = "";
-}
-
-function removeByAttribute(array, attribute, value) {
-  let index = array.length;
-  while (index--) {
-    if (
-      array[index] &&
-      array[index].hasOwnProperty(attribute) &&
-      arguments.length > 2 &&
-      array[index][attribute] === value
-    ) {
-      array.splice(index, 1);
-    }
-  }
-  return array;
-}
+};
 
 function showLibrary() {
   i = 0;
-  isLibDisplayed = true;
   myLibrary.forEach((book) => {
+    //muovere queste operazione fuori dalla funzione?
     const bookDiv = document.createElement("div");
     const bookTitle = document.createElement("h3");
     const bookReadBtn = document.createElement("button");
     const bookRemoveBtn = document.createElement("button");
     const buttonsWrapper = document.createElement("div");
 
-    bookDiv.className = "book" + i;
+    bookDiv.className = "book" + i++;
+    book.div = bookDiv;
+    book.areBookPropsDisplayed = false;
     bookTitle.textContent = book.title;
-    buttonsWrapper.classList.add("button-wrapper");
     bookRemoveBtn.textContent = "X";
     bookRemoveBtn.classList.add("remove-button");
+    buttonsWrapper.classList.add("button-wrapper");
 
     if (!book.read) {
-      bookReadBtn.textContent = "mark as Read";
+      bookReadBtn.textContent = toggleReadString;
     } else {
-      bookReadBtn.textContent = "mark as not Read";
+      bookReadBtn.textContent = toggleNotReadString;
+      book.div.classList.add("read");
     }
 
     bookReadBtn.addEventListener("click", (event) => {
       event.stopPropagation();
-      book.toggleBookRead(book, bookDiv, bookReadBtn);
+      book.toggleBookRead(bookReadBtn);
     });
     bookRemoveBtn.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -159,9 +101,6 @@ function showLibrary() {
     buttonsWrapper.appendChild(bookRemoveBtn);
     bookDiv.appendChild(buttonsWrapper);
     library.appendChild(bookDiv);
-    book.div = bookDiv;
-    book.areBookPropsDisplayed = false;
-    i++;
 
     // expands and collapses book in library
     bookDiv.addEventListener("click", () => {
@@ -197,6 +136,27 @@ function expandBook(book) {
   }
 }
 
+function expandAllBooks() {
+  if (!areAllBooksExpanded) {
+    myLibrary.forEach((book) => {
+      const bookDiv = document.createElement("div");
+      if (!book.areBookPropsDisplayed) {
+        expandBook(book);
+      }
+    });
+    areAllBooksExpanded = true;
+    expandAllButton.textContent = "Collapse All";
+  } else {
+    myLibrary.forEach((book) => {
+      if (book.areBookPropsDisplayed) {
+        expandBook(book);
+      }
+    });
+    areAllBooksExpanded = false;
+    expandAllButton.textContent = "Expand All";
+  }
+}
+
 function removeBook(bookId) {
   let removeConfirm = prompt(
     "Confirm you want to delete this book from Library? (y/n)"
@@ -208,11 +168,25 @@ function removeBook(bookId) {
   }
 }
 
+function removeByAttribute(array, attribute, value) {
+  let index = array.length;
+  while (index--) {
+    if (
+      array[index] &&
+      array[index].hasOwnProperty(attribute) &&
+      arguments.length > 2 &&
+      array[index][attribute] === value
+    ) {
+      array.splice(index, 1);
+    }
+  }
+  return array;
+}
+
 function clearLibraryDisplay() {
   while (library.firstChild) {
     library.removeChild(library.firstChild);
   }
-  isLibDisplayed = false;
 }
 
 function toggleNewBookSidebar() {
@@ -225,14 +199,47 @@ function toggleNewBookSidebar() {
   }
 }
 
-Book.prototype.toggleBookRead = function (book, bookDiv, bookReadBtn) {
-  if (!book.read) {
-    book.read = true;
-    bookDiv.classList.add("read");
-    bookReadBtn.textContent = "mark as not Read";
-  } else {
-    book.read = false;
-    bookDiv.classList.remove("read");
-    bookReadBtn.textContent = "mark as Read";
+function submitNewBook() {
+  let readProperty;
+  inputNewStatusRead.value == "true"
+    ? (readProperty = true)
+    : (readProperty = false);
+  const book = new Book(
+    myLibrary.length,
+    inputNewTitle.value,
+    inputNewAuthor.value,
+    inputNewPublishY.value,
+    inputNewGenre.value,
+    readProperty,
+    false
+  );
+  if (inputNewTitle.value == "" || inputNewAuthor.value == "") {
+    return alert("Book Title and Author are required");
   }
-};
+  myLibrary.push(book);
+
+  clearLibraryDisplay();
+  showLibrary();
+  toggleNewBookSidebar();
+
+  inputNewTitle.value = "";
+  inputNewAuthor.value = "";
+  inputNewPublishY.value = "";
+  inputNewGenre.value = "";
+  //inputNewStatusRead.value = "";
+}
+
+// ------------------------------- START UP EXECUTION --------------------------
+
+for (let i = 0; i < librarySize; i++) {
+  let id = i;
+  let title = "title" + i;
+  let author = "author" + i;
+  let publishY = Math.floor(Math.random() * 1000) + 1000;
+  let genre = bookGenres[Math.floor(Math.random() * 10) % 6];
+  let read = false;
+  const book = new Book(id, title, author, publishY, genre, read);
+  myLibrary.push(book);
+}
+
+showLibrary();
