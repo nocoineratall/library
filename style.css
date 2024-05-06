@@ -79,7 +79,7 @@ p a {
   box-shadow: 0px 3px 10px -5px var(--shadow-color);
 
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 .library > div.read {
@@ -106,7 +106,8 @@ p a {
   border-radius: 6px;
   padding-inline: 15px;
   color: var(--book-font-color);
-  font-size: 0.8rem;
+  font-size: 1rem;
+  font-family: inherit;
 }
 
 .library button:hover {
@@ -115,7 +116,9 @@ p a {
 
 .library .remove-button {
   background-color: var(--book-remove-button);
-  width: 35px;
+  width: 40px;
+  padding: 0;
+  color: var(--book-font-color);
 }
 
 .library .remove-button:hover {
