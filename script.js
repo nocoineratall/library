@@ -1,6 +1,6 @@
 const body = document.querySelector("body");
 const library = document.querySelector(".library");
-const toggleExpand = document.querySelector(".button-toggle-expand");
+const expandAllButton = document.querySelector(".button-toggle-expand");
 const addBookBtn = document.querySelector(".add-book");
 const submitBookBtn = document.querySelector(".submit-button");
 const addBookContainer = document.querySelector(".new-book-container");
@@ -12,7 +12,7 @@ const inputNewPublishY = document.querySelector("#publishY");
 const inputNewGenre = document.querySelector("#genre");
 const inputNewStatusRead = document.querySelector("#read");
 
-let areAllBookExpanded = false; //implementare uso di questo bool
+let areAllBooksExpanded = false; //implementare uso di questo bool
 let isFormDisplayed = false;
 const librarySize = 5;
 let myLibrary = [];
@@ -44,11 +44,25 @@ showLibrary();
 
 // -------------------------------   EVENTS  ----------------------------------- //
 
-toggleExpand.addEventListener("click", () => {
-  myLibrary.forEach((book) => {
-    const bookDiv = document.createElement("div");
-    expandBook(book);
-  });
+expandAllButton.addEventListener("click", () => {
+  if (!areAllBooksExpanded) {
+    myLibrary.forEach((book) => {
+      const bookDiv = document.createElement("div");
+      if (!book.areBookPropsDisplayed) {
+        expandBook(book);
+      }
+    });
+    areAllBooksExpanded = true;
+    expandAllButton.textContent = "Collapse All";
+  } else {
+    myLibrary.forEach((book) => {
+      if (book.areBookPropsDisplayed) {
+        expandBook(book);
+      }
+    });
+    areAllBooksExpanded = false;
+    expandAllButton.textContent = "Expand All";
+  }
 });
 
 addBookBtn.addEventListener("click", toggleNewBookSidebar);
@@ -65,15 +79,18 @@ function Book(id, title, author, publishY, genre, read) {
   this.publishY = publishY;
   this.genre = genre;
   this.read = read;
+  this.arePropsDisplayed = false;
 }
 
 function submitNewBook() {
   const book = new Book(
+    myLibrary.length,
     inputNewTitle.value,
     inputNewAuthor.value,
     inputNewPublishY.value,
     inputNewGenre.value,
-    inputNewStatusRead.value
+    inputNewStatusRead.value,
+    false
   );
   if (inputNewTitle.value == "") {
     return alert("Book title can't be empty");
@@ -110,7 +127,6 @@ function showLibrary() {
   i = 0;
   isLibDisplayed = true;
   myLibrary.forEach((book) => {
-    let areBookPropsDisplayed = false;
     const bookDiv = document.createElement("div");
     const bookTitle = document.createElement("h3");
     const bookReadBtn = document.createElement("button");
@@ -170,7 +186,7 @@ function expandBook(book) {
     book.div.appendChild(bookAuthor);
     book.div.appendChild(bookGenre);
     book.div.appendChild(bookPublishY);
-    return (book.areBookPropsDisplayed = true);
+    book.areBookPropsDisplayed = true;
   } else {
     // collapses the bookDiv removing all children except for h3-title and button-wrapper
     // this is achieved by setting the loop to end at j > 1 (skips last two elements)
@@ -178,7 +194,7 @@ function expandBook(book) {
       book.div.removeChild(book.div.children[j]);
     }
     book.div.classList.remove("read");
-    return (book.areBookPropsDisplayed = false);
+    book.areBookPropsDisplayed = false;
   }
 }
 
