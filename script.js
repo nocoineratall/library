@@ -15,10 +15,9 @@ let toggleReadString = "Mark as read";
 let toggleNotReadString = "Mark as not read";
 let isFormDisplayed = false;
 let areAllBooksExpanded = false;
-const librarySize = 4;
-let myLibrary = [];
 let i = 0; //book object index
 
+// initialize genres
 bookGenres = [
   "Fantasy",
   "Adventure",
@@ -26,7 +25,37 @@ bookGenres = [
   "Sci-fi",
   "Novel",
   "Historical",
+  "Economics",
 ];
+
+// initialize library
+let myLibrary = [];
+
+// define default books which require myLibrary to be initialized
+const book0 = new Book(
+  0,
+  "The Bitcoin Standard",
+  "Saifedean Ammous",
+  2018,
+  "Economics",
+  true,
+  false
+);
+
+const book1 = new Book(1, "1984", "George Orwell", 1949, "Sci-fi", true, false);
+
+const book2 = new Book(
+  2,
+  "La Divina Commedia",
+  "Dante Alighieri",
+  1314,
+  "Novel",
+  false,
+  false
+);
+
+// I can not populate myLibrary
+myLibrary = [book0, book1, book2];
 
 // -------------------------------   EVENTS  ----------------------------------- //
 
@@ -65,7 +94,6 @@ Book.prototype.toggleBookRead = function (bookReadBtn) {
 function showLibrary() {
   i = 0;
   myLibrary.forEach((book) => {
-    //muovere queste operazione fuori dalla funzione?
     const bookDiv = document.createElement("div");
     const bookTitle = document.createElement("h3");
     const bookReadBtn = document.createElement("button");
@@ -231,15 +259,23 @@ function submitNewBook() {
 
 // ------------------------------- START UP EXECUTION --------------------------
 
-for (let i = 0; i < librarySize; i++) {
-  let id = i;
-  let title = "title" + i;
-  let author = "author" + i;
-  let publishY = Math.floor(Math.random() * 1000) + 1000;
-  let genre = bookGenres[Math.floor(Math.random() * 10) % 6];
-  let read = false;
-  const book = new Book(id, title, author, publishY, genre, read);
-  myLibrary.push(book);
-}
+// for (let i = 0; i < librarySize; i++) {
+//   let id = i;
+//   let title = "title" + i;
+//   let author = "author" + i;
+//   let publishY = Math.floor(Math.random() * 1000) + 1000;
+//   let genre = bookGenres[Math.floor(Math.random() * 10) % 6];
+//   let read = false;
+//   const book = new Book(id, title, author, publishY, genre, read);
+//   myLibrary.push(book);
+// }
 
 showLibrary();
+
+// creates the option elements for the genre select input
+bookGenres.forEach((genre) => {
+  const optionElement = document.createElement("option");
+  optionElement.setAttribute("value", genre);
+  optionElement.textContent = genre;
+  inputNewGenre.appendChild(optionElement);
+});
