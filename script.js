@@ -98,13 +98,14 @@ function showLibrary() {
     const bookTitle = document.createElement("h3");
     const bookReadBtn = document.createElement("button");
     const bookRemoveBtn = document.createElement("button");
+    const bookRemoveBtnImg = document.createElement("img");
     const buttonsWrapper = document.createElement("div");
 
     bookDiv.className = "book" + i++;
     book.div = bookDiv;
     book.areBookPropsDisplayed = false;
     bookTitle.textContent = book.title;
-    bookRemoveBtn.textContent = "X";
+    bookRemoveBtnImg.setAttribute("src", "./img/trash-2.svg");
     bookRemoveBtn.classList.add("remove-button");
     buttonsWrapper.classList.add("button-wrapper");
 
@@ -125,6 +126,7 @@ function showLibrary() {
     });
 
     bookDiv.appendChild(bookTitle);
+    bookRemoveBtn.appendChild(bookRemoveBtnImg);
     buttonsWrapper.appendChild(bookReadBtn);
     buttonsWrapper.appendChild(bookRemoveBtn);
     bookDiv.appendChild(buttonsWrapper);
