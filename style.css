@@ -16,6 +16,7 @@
   --book-remove-button: #be123c;
   --book-remove-button-hover: #881337;
   --book-remove-button-active: #4c0519;
+  --new-book-container-width: 20vw;
 }
 
 body {
@@ -64,7 +65,7 @@ p a {
   display: flex;
   flex-direction: column;
   gap: 3vh;
-  padding: 20px;
+  padding-inline: 20px;
   width: 60vw;
   font-size: 1.3rem;
 }
@@ -126,23 +127,29 @@ p a {
 }
 
 .new-book-form button {
-  padding: 5px 10px;
-  border-radius: 6px;
-  border: none;
-  background-color: beige;
   font-family: inherit;
+  font-size: 1rem;
   font-weight: 600;
+
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+
+  background-color: var(--nav-bar-color);
+  color: (var(--book-font-color));
 }
 
 .new-book-container {
-  position: absolute;
-  left: -20vw;
-  top: 65px; /*approssimato a vista */
-  width: 20vw;
+  position: relative;
+  /*questo casino per spostare il pannello 10px più a sinistra per non vedere 
+  lo shadow quando è nascosto */
+  left: calc((calc(var(--new-book-container-width) + 10px)) * (-1));
+  /* top: 65px; approssimato a vista */
+  width: var(--new-book-container-width);
 
-  background-color: var(--nav-bar-color);
+  background-color: var(--book-background-color);
   color: var(--book-font-color);
-  /* box-shadow: 0px 0px 100px 10px rgb(112, 128, 144, 0.8);*/
+  box-shadow: 3px 0px 10px -5px var(--shadow-color);
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   padding-inline: 20px;
@@ -155,7 +162,7 @@ p a {
 }
 
 .new-book-container.display {
-  position: absolute;
+  position: relative;
   left: 0;
 
   transition: 400ms ease;
@@ -192,7 +199,7 @@ select {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 20px;
+  padding-inline: 20px;
 }
 
 .right-side button {
@@ -209,10 +216,12 @@ select {
   padding-block: 5px;
 }
 
-.right-side button:hover {
+.right-side button:hover,
+.new-book-form button:hover {
   background-color: var(--border-color-read);
 }
 
-.right-side button:active {
+.right-side button:active,
+.new-book-form button:active {
   background-color: var(--nav-bar-color);
 }
