@@ -9,6 +9,7 @@
   </head>
   <body>
     <div class="nav-bar">
+      <img src="./img/github-mark-white.png" />
       <p>
         <a href="https://github.com/nocoineratall" target="_blank">
           NoCoinerAtAll
@@ -18,43 +19,48 @@
 
     <h1 class="odin-title">Odin Library</h1>
     <div class="wrapper">
-      <div class="left-side"></div>
+      <div class="left-side">
+        <!-- New Book pop-up sidebar-->
+        <div class="new-book-container">
+          <h2>NEW BOOK FORM</h2>
+          <form
+            action="#"
+            method="post"
+            class="new-book-form"
+            name="add-book-form"
+          >
+            <div class="input-container">
+              <label for="title">Book title:</label>
+              <input type="text" id="title" />
+            </div>
+            <div class="input-container">
+              <label for="author">Author name:</label>
+              <input type="text" id="author" />
+            </div>
+            <div class="input-container">
+              <label for="publishY">Published on:</label>
+              <input type="number" id="publishY" min="1700" max="2024" />
+            </div>
+            <div class="input-container">
+              <label for="genre">Genre:</label>
+              <input type="text" id="genre" />
+            </div>
+            <div class="input-container">
+              <label for="read">Is it read?</label>
+              <select id="read" class="input-status-read">
+                <option value="true">Already read</option>
+                <option value="false" selected>Not read yet</option>
+              </select>
+            </div>
+            <button type="button" class="submit-button">Submit</button>
+          </form>
+        </div>
+      </div>
       <div class="library"></div>
       <div class="right-side">
-        <button class="show-lib">Show Library</button>
+        <button class="button-toggle-expand">Expand All</button>
         <button class="add-book">Add Book</button>
       </div>
-    </div>
-
-    <!-- New Book pop-up sidebar-->
-    <div class="new-book-container">
-      <h2>NEW BOOK FORM</h2>
-      <form action="#" method="post" class="new-book-form" name="add-book-form">
-        <div class="input-container">
-          <label for="title">Book title:</label>
-          <input type="text" id="title" />
-        </div>
-        <div class="input-container">
-          <label for="author">Author name:</label>
-          <input type="text" id="author" />
-        </div>
-        <div class="input-container">
-          <label for="publishY">Published on:</label>
-          <input type="number" id="publishY" min="1700" max="2024" />
-        </div>
-        <div class="input-container">
-          <label for="genre">Genre:</label>
-          <input type="text" id="genre" />
-        </div>
-        <div class="input-container">
-          <label for="read">Is it read?</label>
-          <select id="read" class="input-status-read">
-            <option value="true">Already read</option>
-            <option value="false" selected>Not read yet</option>
-          </select>
-        </div>
-        <button type="button" class="submit-button">Submit</button>
-      </form>
     </div>
   </body>
 </html>
