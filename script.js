@@ -28,8 +28,33 @@ bookGenres = [
   "Economics",
 ];
 
-// initialize library
+// initialize library so it can be accessed by object constructor
 let myLibrary = [];
+
+//book object constructor
+class Book {
+  constructor(id, title, author, publishY, genre, read) {
+    this.id = id;
+    this.title = title;
+    this.author = author;
+    this.publishY = publishY;
+    this.genre = genre;
+    this.read = read;
+    this.arePropsDisplayed = false;
+  }
+
+  toggleBookRead(bookReadBtn) {
+    if (!this.read) {
+      this.read = true;
+      this.div.classList.add("read");
+      bookReadBtn.textContent = toggleNotReadString;
+    } else {
+      this.read = false;
+      this.div.classList.remove("read");
+      bookReadBtn.textContent = toggleReadString;
+    }
+  }
+}
 
 // define default books which require myLibrary to be initialized
 const book0 = new Book(
@@ -42,7 +67,15 @@ const book0 = new Book(
   false
 );
 
-const book1 = new Book(1, "1984", "George Orwell", 1949, "Sci-fi", true, false);
+const book1 = new Book(
+  1,
+  "Nineteeneightyfour",
+  "George Orwell",
+  1949,
+  "Sci-fi",
+  true,
+  false
+);
 
 const book2 = new Book(
   2,
@@ -54,7 +87,6 @@ const book2 = new Book(
   false
 );
 
-// I can not populate myLibrary
 myLibrary = [book0, book1, book2];
 
 // -------------------------------   EVENTS  ----------------------------------- //
@@ -67,30 +99,6 @@ submitBookBtn.addEventListener("click", submitNewBook);
 
 // -------------------------------  FUNCTIONS ----------------------------------- //
 
-//book object constructor
-function Book(id, title, author, publishY, genre, read) {
-  this.id = myLibrary.length;
-  this.title = title;
-  this.author = author;
-  this.publishY = publishY;
-  this.genre = genre;
-  this.read = read;
-  this.arePropsDisplayed = false;
-}
-
-// Prototype function definition
-Book.prototype.toggleBookRead = function (bookReadBtn) {
-  if (!this.read) {
-    this.read = true;
-    this.div.classList.add("read");
-    bookReadBtn.textContent = toggleNotReadString;
-  } else {
-    this.read = false;
-    this.div.classList.remove("read");
-    bookReadBtn.textContent = toggleReadString;
-  }
-};
-
 function showLibrary() {
   i = 0;
   myLibrary.forEach((book) => {
@@ -102,11 +110,13 @@ function showLibrary() {
     const buttonsWrapper = document.createElement("div");
 
     bookDiv.className = "book" + i++;
+    bookDiv.setAttribute("id", book.id);
     book.div = bookDiv;
     book.areBookPropsDisplayed = false;
     bookTitle.textContent = book.title;
     bookRemoveBtnImg.setAttribute("src", "./img/trash-2.svg");
     bookRemoveBtn.classList.add("remove-button");
+
     buttonsWrapper.classList.add("button-wrapper");
 
     if (!book.read) {
@@ -122,7 +132,8 @@ function showLibrary() {
     });
     bookRemoveBtn.addEventListener("click", (event) => {
       event.stopPropagation();
-      removeBook(book.id);
+      let id = event.currentTarget.parentNode.parentNode.getAttribute("id");
+      removeBook(id);
     });
 
     bookDiv.appendChild(bookTitle);
@@ -188,29 +199,14 @@ function expandAllBooks() {
 }
 
 function removeBook(bookId) {
-  let removeConfirm = prompt(
-    "Confirm you want to delete this book from Library? (y/n)"
-  ).toLowerCase();
-  if (removeConfirm == "y") {
-    removeByAttribute(myLibrary, "id", bookId);
-    clearLibraryDisplay();
-    showLibrary(i);
-  }
-}
-
-function removeByAttribute(array, attribute, value) {
-  let index = array.length;
-  while (index--) {
-    if (
-      array[index] &&
-      array[index].hasOwnProperty(attribute) &&
-      arguments.length > 2 &&
-      array[index][attribute] === value
-    ) {
-      array.splice(index, 1);
+  // looks into myLibrary for the element with property bookId and removes it from myLibrary
+  for (let i = 0; i < myLibrary.length; i++) {
+    if (myLibrary[i].id == bookId) {
+      myLibrary.splice(i, 1);
     }
   }
-  return array;
+  clearLibraryDisplay();
+  showLibrary();
 }
 
 function clearLibraryDisplay() {
@@ -260,17 +256,6 @@ function submitNewBook() {
 }
 
 // ------------------------------- START UP EXECUTION --------------------------
-
-// for (let i = 0; i < librarySize; i++) {
-//   let id = i;
-//   let title = "title" + i;
-//   let author = "author" + i;
-//   let publishY = Math.floor(Math.random() * 1000) + 1000;
-//   let genre = bookGenres[Math.floor(Math.random() * 10) % 6];
-//   let read = false;
-//   const book = new Book(id, title, author, publishY, genre, read);
-//   myLibrary.push(book);
-// }
 
 showLibrary();
 
